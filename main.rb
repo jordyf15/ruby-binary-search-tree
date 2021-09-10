@@ -1,6 +1,11 @@
 class Node
   include Comparable
   attr_accessor :data, :left_child, :right_child
+
+  def <=>(value)
+    @data <=> value
+  end
+  
   def initialize data
     @data = data
     @left_child = nil
@@ -25,6 +30,22 @@ class Tree
     return root_node
   end
 
+  def insert value, node = @root, parent = nil, left = nil
+    if node == nil
+      node = Node.new(value) 
+      left == true ? parent.left_child = node : parent.right_child = node
+      return node
+    end
+    if node > value
+      insert value, node.left_child, node, true
+    elsif node < value
+      insert value, node.right_child, node, false
+    else
+      puts "Value #{value} already exist in the binary search tree!"
+      return node
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -34,4 +55,10 @@ end
 
 bst = Tree.new [1,2,3,4,5,6,7,8,9]
 bst.pretty_print
+puts "\n\n"
+bst.insert 10
+bst.insert -1
+bst.insert 1
+bst.pretty_print
+# bst.pretty_print
 
