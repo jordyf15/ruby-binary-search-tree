@@ -1,10 +1,5 @@
 class Node
-  include Comparable
   attr_accessor :data, :left_child, :right_child
-
-  def <=>(value)
-    @data <=> value
-  end
   
   def initialize data
     @data = data
@@ -36,13 +31,24 @@ class Tree
       left == true ? parent.left_child = node : parent.right_child = node
       return node
     end
-    if node > value
+    if node.data > value
       insert value, node.left_child, node, true
-    elsif node < value
+    elsif node.data < value
       insert value, node.right_child, node, false
     else
       puts "Value #{value} already exist in the binary search tree!"
       return node
+    end
+  end
+
+  def find_parent value, node = @root
+    return nil if node == nil || @root == value
+    return node if node.left_child && node.left_child.data == value
+    return node if node.right_child && node.right_child.data == value   
+    if node.data > value
+      find_parent value, node.left_child
+    else
+      find_parent value, node.right_child
     end
   end
 
@@ -51,8 +57,8 @@ class Tree
       puts "The value #{value} doesn't exist in the tree"
       return
     end
-    return node if node == value
-    if node > value
+    return node if node.data == value
+    if node.data > value
       find value, node.left_child
     else
       find value, node.right_child
@@ -69,12 +75,6 @@ end
 bst = Tree.new [1,2,3,4,5,6,7,8,9]
 bst.pretty_print
 puts "\n\n"
-# bst.insert 10
-# bst.insert -1
-# bst.insert 1
-# bst.pretty_print
-p bst.find 8
-p bst.find 10
-p bst.find 5
-# bst.pretty_print
+p bst.find_parent 1
+bst.pretty_print
 
