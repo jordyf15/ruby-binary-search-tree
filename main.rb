@@ -1,6 +1,5 @@
 class Node
   attr_accessor :data, :left_child, :right_child
-  
   def initialize data
     @data = data
     @left_child = nil
@@ -43,53 +42,36 @@ class Tree
 
   def delete value
     deleted_node = find value
-    deleted_node_parent = find_parent value
+    deleted_node_parent = find value
     if deleted_node == nil
       puts "The value #{value} doesn't exist!"
     elsif deleted_node.left_child && deleted_node.right_child == nil # have one child (left)
-
-      if deleted_node_parent.data > deleted_node.data
-        deleted_node_parent.left_child = deleted_node.left_child
-      else
-        deleted_node_parent.right_child = deleted_node.left_child
-      end
-      deleted_node.left_child = nil
-
+      deleted_node.data = deleted_node.left_child.data
+      deleted_node.right_child = deleted_node.left_child.right_child
+      deleted_node.left_child = deleted_node.left_child.left_child
     elsif deleted_node.right_child && deleted_node.left_child == nil # have one child (right)
-
-      if deleted_node_parent.data > deleted_node.data
-        deleted_node_parent.left_child = deleted_node.right_child
-      else
-        deleted_node_parent.right_child = deleted_node.right_child
-      end
-      
-      deleted_node.right_child = nil
+      deleted_node.data = deleted_node.right_child.data
+      deleted_node.left_child = deleted_node.right_child.left_child
+      deleted_node.right_child = deleted_node.right_child.right_child
     elsif deleted_node.right_child == nil && deleted_node.left_child == nil # leaf node
-     
-      if deleted_node_parent.data > deleted_node.data
-        deleted_node_parent.left_child = nil
+      deleted_node_parent = find_parent value
+      if deleted_node == @root
+        @root = nil
       else
-        deleted_node_parent.right_child = nil
+        if deleted_node_parent.data > deleted_node.data
+          deleted_node_parent.left_child = nil
+        else
+          deleted_node_parent.right_child = nil
+        end
       end
-    
-    else # have two child
-      replace_node = deleted_node.right_child
-      until replace_node.left_child == nil
-        replace_node = replace_node.left_child
+    else # two child
+      successor_node = deleted_node.right_child
+      until successor_node.left_child == nil
+        successor_node = successor_node.left_child
       end
-      temp_node = Node.new replace_node.data
-      temp_node.left_child = deleted_node.left_child
-      temp_node.right_child = replace_node.right_child
-      delete replace_node.data
-      
-      if deleted_node_parent.data > deleted_node.data
-        deleted_node_parent.left_child = temp_node
-        temp_node.left_child = deleted_node.left_child
-      else
-        deleted_node_parent.right_child = temp_node
-        temp_node.left_child = deleted_node.left_child
-      end
-      
+      temp = successor_node.data
+      delete successor_node.data
+      deleted_node.data = temp
     end
   end
 
@@ -125,8 +107,8 @@ class Tree
 end
 
 bst = Tree.new [1,2,3,4,5,6,7,8,9]
+bst.insert 5.5
 bst.pretty_print
 puts "\n\n"
-bst.delete 7
+bst.delete 5
 bst.pretty_print
-
