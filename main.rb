@@ -41,6 +41,58 @@ class Tree
     end
   end
 
+  def delete value
+    deleted_node = find value
+    deleted_node_parent = find_parent value
+    if deleted_node == nil
+      puts "The value #{value} doesn't exist!"
+    elsif deleted_node.left_child && deleted_node.right_child == nil # have one child (left)
+
+      if deleted_node_parent.data > deleted_node.data
+        deleted_node_parent.left_child = deleted_node.left_child
+      else
+        deleted_node_parent.right_child = deleted_node.left_child
+      end
+      deleted_node.left_child = nil
+
+    elsif deleted_node.right_child && deleted_node.left_child == nil # have one child (right)
+
+      if deleted_node_parent.data > deleted_node.data
+        deleted_node_parent.left_child = deleted_node.right_child
+      else
+        deleted_node_parent.right_child = deleted_node.right_child
+      end
+      
+      deleted_node.right_child = nil
+    elsif deleted_node.right_child == nil && deleted_node.left_child == nil # leaf node
+     
+      if deleted_node_parent.data > deleted_node.data
+        deleted_node_parent.left_child = nil
+      else
+        deleted_node_parent.right_child = nil
+      end
+    
+    else # have two child
+      replace_node = deleted_node.right_child
+      until replace_node.left_child == nil
+        replace_node = replace_node.left_child
+      end
+      temp_node = Node.new replace_node.data
+      temp_node.left_child = deleted_node.left_child
+      temp_node.right_child = replace_node.right_child
+      delete replace_node.data
+      
+      if deleted_node_parent.data > deleted_node.data
+        deleted_node_parent.left_child = temp_node
+        temp_node.left_child = deleted_node.left_child
+      else
+        deleted_node_parent.right_child = temp_node
+        temp_node.left_child = deleted_node.left_child
+      end
+      
+    end
+  end
+
   def find_parent value, node = @root
     return nil if node == nil || @root == value
     return node if node.left_child && node.left_child.data == value
@@ -75,6 +127,6 @@ end
 bst = Tree.new [1,2,3,4,5,6,7,8,9]
 bst.pretty_print
 puts "\n\n"
-p bst.find_parent 1
+bst.delete 7
 bst.pretty_print
 
