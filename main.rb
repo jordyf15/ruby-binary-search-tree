@@ -46,6 +46,19 @@ class Tree
     end
   end
 
+  def find value, node = @root
+    if node == nil
+      puts "The value #{value} doesn't exist in the tree"
+      return
+    end
+    return node if node == value
+    if node > value
+      find value, node.left_child
+    else
+      find value, node.right_child
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -56,9 +69,12 @@ end
 bst = Tree.new [1,2,3,4,5,6,7,8,9]
 bst.pretty_print
 puts "\n\n"
-bst.insert 10
-bst.insert -1
-bst.insert 1
-bst.pretty_print
+# bst.insert 10
+# bst.insert -1
+# bst.insert 1
+# bst.pretty_print
+p bst.find 8
+p bst.find 10
+p bst.find 5
 # bst.pretty_print
 
