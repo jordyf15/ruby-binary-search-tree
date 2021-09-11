@@ -106,6 +106,15 @@ class Tree
     return (leftTreeHeight > rightTreeHeight ? leftTreeHeight : rightTreeHeight) + 1
   end
 
+  def depth node, depth = 0, current_node = @root
+    return depth if current_node == node
+    if node.data > current_node.data
+      depth node, depth+1, current_node.right_child
+    else
+      depth node, depth+1, current_node.left_child
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -114,8 +123,9 @@ class Tree
 end
 
 bst = Tree.new [1,2,3,4,5]
+bst.insert 6
 bst.pretty_print
 puts "\n\n"
-p bst.height bst.find(2)
+p bst.depth bst.find(6)
 # bst.delete 5
 # bst.pretty_print
