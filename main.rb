@@ -134,6 +134,27 @@ class Tree
     values
   end
 
+  def in_order node = @root, values = []
+    return values if node == nil
+    in_order node.left_child, values
+    values.push node.data
+    in_order node.right_child, values
+  end
+
+  def pre_order node = @root, values = []
+    return values if node == nil
+    values.push node.data
+    pre_order node.left_child, values
+    pre_order node.right_child, values
+  end
+
+  def post_order node = @root, values = []
+    return values if node == nil
+    post_order node.left_child, values
+    post_order node.right_child, values
+    values.push node.data
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -144,4 +165,6 @@ end
 bst = Tree.new [1,2,3,4,5,6,7,8,9]
 bst.pretty_print
 puts "\n\n"
-p bst.level_order
+p bst.in_order
+p bst.pre_order
+p bst.post_order
