@@ -115,6 +115,25 @@ class Tree
     end
   end
 
+  def level_order node = @root, queue = [@root], values = []
+    return values if queue.size == 0
+    values.push node.data
+    queue.shift
+    queue.push node.left_child unless node.left_child == nil
+    queue.push node.right_child unless node.right_child == nil
+    level_order queue[0], queue, values
+  end
+
+  def level_order_iterative node = @root, queue = [@root], values = []
+    until queue.size == 0
+      values.push queue[0].data
+      queue.push queue[0].left_child unless queue[0].left_child == nil
+      queue.push queue[0].right_child unless queue[0].right_child == nil
+      queue.shift
+    end
+    values
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -122,10 +141,7 @@ class Tree
   end
 end
 
-bst = Tree.new [1,2,3,4,5]
-bst.insert 6
+bst = Tree.new [1,2,3,4,5,6,7,8,9]
 bst.pretty_print
 puts "\n\n"
-p bst.depth bst.find(6)
-# bst.delete 5
-# bst.pretty_print
+p bst.level_order
