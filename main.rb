@@ -9,8 +9,7 @@ end
 
 class Tree
   def initialize array
-    @root = build_tree array.sort.uniq, 0, array.size-1
-    p array.sort.uniq
+    @root = build_tree array.sort.uniq, 0, array.uniq.size-1
   end
 
   def build_tree array, idx_start, idx_end
@@ -180,9 +179,25 @@ class Tree
   end
 end
 
-bst = Tree.new [1,2,3,4,5,6,7,8,9]
-bst.insert 0
-# bst.insert -1
-bst.pretty_print
-puts "\n\n"
-p bst.balanced?
+
+def driver_script
+  arr = Array.new(15) { rand(1..100) }
+  p arr
+  bst = Tree.new (arr)
+  bst.pretty_print
+  p bst.balanced?
+  p bst.in_order
+  p bst.pre_order
+  p bst.post_order
+  bst.insert 101
+  bst.insert 102
+  bst.insert 103
+  p bst.balanced?
+  bst.rebalance
+  p bst.balanced?
+  p bst.in_order
+  p bst.pre_order
+  p bst.post_order
+end
+
+driver_script
