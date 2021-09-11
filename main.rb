@@ -155,17 +155,17 @@ class Tree
     values.push node.data
   end
 
-  def balance? node = @root, balance = true
-    return balance if node == nil
+  def balanced? node = @root, balanced = true
+    return balanced if node == nil
 
     left_tree_height = node.left_child == nil ? 0 : height(node.left_child)+1
     right_tree_height = node.right_child == nil ? 0 : height(node.right_child)+1
-    balance = false if left_tree_height - right_tree_height > 1 || left_tree_height - right_tree_height < -1
+    balanced = false if left_tree_height - right_tree_height > 1 || left_tree_height - right_tree_height < -1
     
-    return balance if balance == false
-    return false if balance?(node.left_child, balance) == false
-    return false if balance?(node.right_child, balance) == false
-    balance
+    return balanced if balanced == false
+    return false if balanced?(node.left_child, balanced) == false
+    return false if balanced?(node.right_child, balanced) == false
+    balanced
   end
 
   def rebalance 
@@ -182,7 +182,7 @@ end
 
 bst = Tree.new [1,2,3,4,5,6,7,8,9]
 bst.insert 0
-bst.insert -1
+# bst.insert -1
 bst.pretty_print
 puts "\n\n"
-p bst.balance?
+p bst.balanced?
