@@ -155,6 +155,10 @@ class Tree
     values.push node.data
   end
 
+  def rebalance 
+    @root = build_tree level_order.uniq.sort, 0, level_order.uniq.size-1  
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -163,8 +167,11 @@ class Tree
 end
 
 bst = Tree.new [1,2,3,4,5,6,7,8,9]
+bst.insert 10
+bst.insert 11
+bst.insert 12
 bst.pretty_print
 puts "\n\n"
-p bst.in_order
-p bst.pre_order
-p bst.post_order
+
+bst.rebalance
+bst.pretty_print
