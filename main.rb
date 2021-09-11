@@ -99,6 +99,13 @@ class Tree
     end
   end
 
+  def height node 
+    return -1 if node == nil
+    leftTreeHeight = height node.left_child
+    rightTreeHeight = height node.right_child
+    return (leftTreeHeight > rightTreeHeight ? leftTreeHeight : rightTreeHeight) + 1
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -106,9 +113,9 @@ class Tree
   end
 end
 
-bst = Tree.new [1,2,3,4,5,6,7,8,9]
-bst.insert 5.5
+bst = Tree.new [1,2,3,4,5]
 bst.pretty_print
 puts "\n\n"
-bst.delete 5
-bst.pretty_print
+p bst.height bst.find(2)
+# bst.delete 5
+# bst.pretty_print
