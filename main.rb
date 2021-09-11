@@ -155,11 +155,25 @@ class Tree
     values.push node.data
   end
 
+  def balance? node = @root, balance = true
+    return balance if node == nil
+
+    left_tree_height = node.left_child == nil ? 0 : height(node.left_child)+1
+    right_tree_height = node.right_child == nil ? 0 : height(node.right_child)+1
+    balance = false if left_tree_height - right_tree_height > 1 || left_tree_height - right_tree_height < -1
+    
+    return balance if balance == false
+    return false if balance?(node.left_child, balance) == false
+    return false if balance?(node.right_child, balance) == false
+    balance
+  end
+
   def rebalance 
     @root = build_tree level_order.uniq.sort, 0, level_order.uniq.size-1  
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
+    return if @root == nil
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left_child, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left_child
@@ -167,11 +181,8 @@ class Tree
 end
 
 bst = Tree.new [1,2,3,4,5,6,7,8,9]
-bst.insert 10
-bst.insert 11
-bst.insert 12
+bst.insert 0
+bst.insert -1
 bst.pretty_print
 puts "\n\n"
-
-bst.rebalance
-bst.pretty_print
+p bst.balance?
